@@ -13,7 +13,7 @@ locals {
 # Generate Azure provider configuration
 generate "provider" {
   path      = "provider.tf"
-  if_exists = "overwrite_terragrunt"
+  if_exists = "overwrite"
   contents  = <<EOF
     terraform {
         required_providers {
@@ -51,7 +51,7 @@ remote_state {
   }
   generate = {
     path      = "backend.tf"
-    if_exists = "overwrite_terragrunt"
+    if_exists = "overwrite"
   }
 }
 
