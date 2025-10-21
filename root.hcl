@@ -1,10 +1,10 @@
 locals {
   #   Load environment variables
   region                       = "${get_env("region", "uksouth")}"
-  subscription_id              = "${get_env("subscription_id")}"
-  client_id                    = "${get_env("client_id")}"
-  client_secret                = "${get_env("client_secret")}"
-  tenant_id                    = "${get_env("tenant_id")}"
+  subscription_id              = "${get_env("ARM_SUBSCRIPTION_ID")}"
+  client_id                    = "${get_env("ARM_CLIENT_ID")}"
+  client_secret                = "${get_env("ARM_CLIENT_SECRET")}"
+  tenant_id                    = "${get_env("ARM_TENANT_ID")}"
   tfstate_rg_name              = "${get_env("tfstate_rg_name")}"
   tfstate_storage_account_name = "${get_env("tfstate_storage_account_name")}"
   tf_state_container_name      = "${get_env("tfstate_container_name")}"
