@@ -1,3 +1,8 @@
+variable "env_name" {
+  description = "The environment name (e.g., dev, prod)"
+  type        = string
+}
+
 variable "rg_name" {
   description = "The name of the Resource Group"
   type        = string
@@ -7,12 +12,6 @@ variable "location" {
   description = "The Azure region where the Resource Group will be created"
   type        = string
   default = "uksouth"
-}
-
-variable "tags" {
-  description = "A map of tags to assign to the resource group"
-  type        = map(string)
-  default     = {}
 }
 
 variable "swa_name" {
@@ -32,18 +31,13 @@ variable "swa_sku_size" {
   default     = "Free"
 }
 
-# variable "repository_branch" {
-#   description = "The branch of the repository to deploy"
-#   type        = string
-#   default     = "main"
-# }
+variable "key_vault_id" {
+  description = "The ID of the Key Vault to store secrets"
+  type        = string
+}
 
-# variable "repository_url" {
-#   description = "The URL of the repository containing the Static Web App source code"
-#   type        = string
-# }
-
-# variable "repository_token" {
-#   description = "The token used to access the repository if it's private"
-#   type        = string
-# }
+variable "tags" {
+  description = "A map of tags to assign to the resource group"
+  type        = map(string)
+  default     = {}
+}
