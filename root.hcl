@@ -5,9 +5,9 @@ locals {
   client_id                    = "${get_env("ARM_CLIENT_ID")}"
   client_secret                = "${get_env("ARM_CLIENT_SECRET")}"
   tenant_id                    = "${get_env("ARM_TENANT_ID")}"
-  tfstate_rg_name              = "${get_env("tfstate_rg_name")}"
-  tfstate_storage_account_name = "${get_env("tfstate_storage_account_name")}"
-  tf_state_container_name      = "${get_env("tfstate_container_name")}"
+  tfstate_rg_name              = "${get_env("TF_VAR_TFSTATE_RG_NAME")}"
+  tfstate_storage_account_name = "${get_env("TF_VAR_TFSTATE_STORAGE_ACCOUNT_NAME")}"
+  tf_state_container_name      = "${get_env("TF_VAR_TF_STATE_CONTAINER_NAME")}"
 }
 
 # Generate Azure provider configuration
