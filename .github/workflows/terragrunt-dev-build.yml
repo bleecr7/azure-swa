@@ -87,10 +87,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ apply ]
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v5
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v5
         with:
-          repository: "bleecr7/react-playground"
+          name: react-build-dev
+          github-token: ${{ secrets.GITHUB_TOKEN }} # token with actions:read permissions on target repo
+          repository: bleecr7/react-playground
+          run-id: 18732776190
+          path: /tmp/dist/
       
       - name: Azure Login
         uses: azure/login@v2
@@ -111,6 +115,5 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "upload"
-          app_build_command: "npm run build"
-          app_location: "./src" # App source code path
-          output_location: "./dist" # Built app content path
+          skip_app_build: true
+          app_location: "/tmp/dist/" # App source code path
