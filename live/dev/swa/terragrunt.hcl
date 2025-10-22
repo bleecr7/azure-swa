@@ -16,9 +16,9 @@ terraform {
 }
 
 inputs = {
-  rg_name  = "${local.env_name}-swa-rg"
-  location = "westeurope"
-  swa_name = "${local.env_name}-swa"
+  rg_name      = "${local.env_name}-swa-rg"
+  location     = "westeurope"
+  swa_name     = "${local.env_name}-swa"
   swa_sku_tier = "Free"
   swa_sku_size = "Free"
   # repository_url = "${local.app_url}"
