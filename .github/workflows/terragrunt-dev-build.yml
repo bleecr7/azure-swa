@@ -71,9 +71,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terragrunt-plan-artifact
+          path: /tmp/terragrunt/
       
-      - name: Apply
-        uses: gruntwork-io/terragrunt-action@v3
-        with:
-          tg_dir: ${{ env.WORKING_DIRECTORY }}
-          tg_command: 'run --all --log-level debug --out-dir /tmp/terragrunt/tfplan/ apply'
+      - name: List plan files
+        run: tree /tmp/terragrunt/tfplan/
+
+      # - name: Apply
+      #   uses: gruntwork-io/terragrunt-action@v3
+      #   with:
+      #     tg_dir: ${{ env.WORKING_DIRECTORY }}
+      #     tg_command: 'run --all --log-level debug --out-dir /tmp/terragrunt/tfplan/ apply'
