@@ -19,10 +19,12 @@ env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
   TF_VAR_TFSTATE_RG_NAME: ${{ vars.TF_VAR_TFSTATE_RG_NAME }}
   TF_VAR_TFSTATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_VAR_TFSTATE_STORAGE_ACCOUNT_NAME }}
   TF_VAR_TFSTATE_CONTAINER_NAME: ${{ vars.TF_VAR_TFSTATE_CONTAINER_NAME }}
 
+  
 jobs:
   checks:
     runs-on: ubuntu-latest
