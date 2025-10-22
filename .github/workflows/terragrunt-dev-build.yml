@@ -76,8 +76,8 @@ jobs:
       - name: List plan files
         run: tree /tmp/terragrunt/tfplan/
 
-      # - name: Apply
-      #   uses: gruntwork-io/terragrunt-action@v3
-      #   with:
-      #     tg_dir: ${{ env.WORKING_DIRECTORY }}
-      #     tg_command: 'run --all --log-level debug --out-dir /tmp/terragrunt/tfplan/ apply'
+      - name: Apply
+        uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_dir: ${{ env.WORKING_DIRECTORY }}
+          tg_command: 'run --all --log-level debug --out-dir /tmp/terragrunt/tfplan/ apply'
