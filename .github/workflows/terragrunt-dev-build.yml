@@ -94,7 +94,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }} # token with actions:read permissions on target repo
           repository: bleecr7/react-playground
           run-id: 18732776190
-          path: /tmp/dist/
+          path: ./dist/
+
+      - name: 'Check files'
+        run: tree ./dist/
       
       - name: Azure Login
         uses: azure/login@v2
@@ -116,4 +119,4 @@ jobs:
           azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "upload"
           skip_app_build: true
-          app_location: "/tmp/dist/" # App source code path
+          app_location: "./dist/" # App source code path
