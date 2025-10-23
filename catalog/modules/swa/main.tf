@@ -18,3 +18,11 @@ resource "azurerm_key_vault_secret" "swa_api_key" {
   value        = azurerm_static_web_app.swa.api_key
   key_vault_id = var.key_vault_id
 }
+
+resource "azurerm_dns_cname_record" "swa_cname" {
+  name                = "@"
+  zone_name           = var.dns_zone_name
+  resource_group_name = var.dns_rg_name
+  ttl                 = 300
+  record              = azurerm_static_web_app.swa.default_host_name
+}

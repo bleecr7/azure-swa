@@ -36,6 +36,16 @@ variable "key_vault_id" {
   type        = string
 }
 
+variable "dns_zone_name" {
+  description = "The DNS zone name for the CNAME record"
+  type        = string
+}
+
+variable "dns_rg_name" {
+  description = "The Resource Group name where the DNS zone is located"
+  type        = string
+}
+
 variable "tags" {
   description = "A map of tags to assign to the resource group"
   type        = map(string)
