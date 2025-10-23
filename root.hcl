@@ -7,6 +7,8 @@ locals {
   tfstate_rg_name              = "${get_env("TF_VAR_TFSTATE_RG_NAME")}"
   tfstate_storage_account_name = "${get_env("TF_VAR_TFSTATE_STORAGE_ACCOUNT_NAME")}"
   tf_state_container_name      = "${get_env("TF_VAR_TFSTATE_CONTAINER_NAME")}"
+  cloudflare_email              = "${get_env("CLOUDFLARE_EMAIL")}"
+  cloudflare_api_token         = "${get_env("CLOUDFLARE_API_TOKEN")}"
 }
 
 # Generate Azure provider configuration
@@ -28,12 +30,20 @@ generate "provider" {
 
             tfe = {
             source  = "hashicorp/tfe"
-            version = "~> 0.30"
+            version = "~> 0.70"
+            }
+
+            cloudflare = {
+            source  = "cloudflare/cloudflare"
+            version = "~> 5.0"
             }
         }
     }
     provider "azurerm" {
         features {}
+    }
+    provider "cloudflare" {
+      api_token = "${local.cloudflare_api_token}"
     }
     EOF
 }

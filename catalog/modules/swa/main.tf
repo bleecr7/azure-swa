@@ -13,16 +13,39 @@ resource "azurerm_static_web_app" "swa" {
   tags = var.tags
 }
 
+resource "azurerm_static_web_app_custom_domain" "swa_custom_domain" {
+  static_web_app_id = azurerm_static_web_app.swa.id
+  domain_name       = var.cloudflare_zone_name
+  validation_type   = "dns-txt-token"
+}
+
 resource "azurerm_key_vault_secret" "swa_api_key" {
   name         = "${var.env_name}-swa-api-key"
   value        = azurerm_static_web_app.swa.api_key
   key_vault_id = var.key_vault_id
 }
 
-resource "azurerm_dns_cname_record" "swa_cname" {
-  name                = "@"
-  zone_name           = var.dns_zone_name
-  resource_group_name = var.dns_rg_name
-  ttl                 = 300
-  record              = azurerm_static_web_app.swa.default_host_name
+resource "cloudflare_dns_record" "cname_swa" {
+  content = azurerm_static_web_app.swa.default_host_name
+  name    = var.cloudflare_zone_name
+  proxied = true
+  tags    = []
+  ttl     = 1
+  type    = "CNAME"
+  zone_id = var.cloudflare_zone_id
+  settings = {
+    flatten_cname = false
+  }
+}
+
+resource "cloudflare_dns_record" "txt_validation_swa" {
+  depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
+  content = azurerm_static_web_app_custom_domain.swa_custom_domain.validation_token
+  name    = "@"
+  proxied = false
+  tags    = []
+  ttl     = 1
+  type    = "TXT"
+  zone_id = var.cloudflare_zone_id
+  settings = {}
 }

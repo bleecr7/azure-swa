@@ -36,14 +36,15 @@ variable "key_vault_id" {
   type        = string
 }
 
-variable "dns_zone_name" {
-  description = "The DNS zone name for the CNAME record"
+variable "cloudflare_zone_id" {
+  description = "The Cloudflare Zone ID for DNS record creation"
   type        = string
 }
 
-variable "dns_rg_name" {
-  description = "The Resource Group name where the DNS zone is located"
+variable "cloudflare_zone_name" {
+  description = "The Cloudflare Zone Name for DNS record creation"
   type        = string
+  
 }
 
 variable "tags" {
