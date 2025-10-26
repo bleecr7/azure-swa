@@ -11,6 +11,14 @@ resource "azurerm_static_web_app" "swa" {
   sku_tier = var.swa_sku_tier
   sku_size = var.swa_sku_size
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      repository_branch,
+      repository_url,
+      repository_token
+    ]
+  }
 }
 
 resource "azurerm_static_web_app_custom_domain" "swa_custom_domain" {
@@ -27,7 +35,7 @@ resource "azurerm_key_vault_secret" "swa_api_key" {
 
 resource "cloudflare_dns_record" "cname_swa" {
   content = azurerm_static_web_app.swa.default_host_name
-  name    = var.cloudflare_zone_name
+  name    = "dev"
   proxied = true
   tags    = []
   ttl     = 1
@@ -48,4 +56,8 @@ resource "cloudflare_dns_record" "txt_validation_swa" {
   type    = "TXT"
   zone_id = var.cloudflare_zone_id
   settings = {}
+
+  lifecycle {
+    ignore_changes = [ content ]
+  }
 }
