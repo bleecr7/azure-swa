@@ -55,7 +55,7 @@ jobs:
           tg_command: 'run --all --log-level debug --out-dir /tmp/terragrunt/tfplan/ --json-out-dir /tmp/terragrunt/json/ plan'
       
       - name: 'Show plan output'
-        run: echo /tmp/terragrunt/json/*/*.json | jq .
+        run: cat /tmp/terragrunt/json/*/*.json | jq '.resource_changes[]' .
 
       - name: 'Upload Plan Artifact'
         uses: actions/upload-artifact@v4
