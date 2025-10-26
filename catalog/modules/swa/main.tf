@@ -23,7 +23,7 @@ resource "azurerm_static_web_app" "swa" {
 
 resource "azurerm_static_web_app_custom_domain" "swa_custom_domain" {
   static_web_app_id = azurerm_static_web_app.swa.id
-  domain_name       = var.cloudflare_zone_name
+  domain_name       = "${var.env_name}.${var.cloudflare_zone_name}"
   validation_type   = "dns-txt-token"
 }
 
@@ -35,7 +35,7 @@ resource "azurerm_key_vault_secret" "swa_api_key" {
 
 resource "cloudflare_dns_record" "cname_swa" {
   content = azurerm_static_web_app.swa.default_host_name
-  name    = "dev"
+  name    = "${var.env_name}"
   proxied = true
   tags    = []
   ttl     = 1
@@ -49,7 +49,7 @@ resource "cloudflare_dns_record" "cname_swa" {
 resource "cloudflare_dns_record" "txt_validation_swa" {
   depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
   content = azurerm_static_web_app_custom_domain.swa_custom_domain.validation_token
-  name    = "@"
+  name    = "${var.env_name}"
   proxied = false
   tags    = []
   ttl     = 1
