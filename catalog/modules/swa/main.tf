@@ -58,6 +58,24 @@ resource "cloudflare_dns_record" "txt_validation_swa" {
   settings = {}
 
   lifecycle {
+    replace_triggered_by = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
+    ignore_changes = [ content ]
+  }
+}
+
+resource "cloudflare_dns_record" "txt_validation_swa_root" {
+  depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
+  content = azurerm_static_web_app_custom_domain.swa_custom_domain.validation_token
+  name    = "@"
+  proxied = false
+  tags    = []
+  ttl     = 1
+  type    = "TXT"
+  zone_id = var.cloudflare_zone_id
+  settings = {}
+
+  lifecycle {
+    replace_triggered_by = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
     ignore_changes = [ content ]
   }
 }
