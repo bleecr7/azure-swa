@@ -27,6 +27,12 @@ resource "azurerm_static_web_app_custom_domain" "swa_custom_domain" {
   validation_type   = "dns-txt-token"
 }
 
+resource "azurerm_static_web_app_custom_domain" "swa_custom_domain_root" {
+  static_web_app_id = azurerm_static_web_app.swa.id
+  domain_name       = "${var.cloudflare_zone_name}"
+  validation_type   = "dns-txt-token"
+}
+
 resource "azurerm_key_vault_secret" "swa_api_key" {
   name         = "${var.env_name}-swa-api-key"
   value        = azurerm_static_web_app.swa.api_key
@@ -64,8 +70,8 @@ resource "cloudflare_dns_record" "txt_validation_swa" {
 }
 
 resource "cloudflare_dns_record" "txt_validation_swa_root" {
-  depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
-  content = azurerm_static_web_app_custom_domain.swa_custom_domain.validation_token
+  depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain_root ]
+  content = azurerm_static_web_app_custom_domain.swa_custom_domain_root.validation_token
   name    = "@"
   proxied = false
   tags    = []
@@ -75,7 +81,7 @@ resource "cloudflare_dns_record" "txt_validation_swa_root" {
   settings = {}
 
   lifecycle {
-    replace_triggered_by = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
+    replace_triggered_by = [ azurerm_static_web_app_custom_domain.swa_custom_domain_root ]
     ignore_changes = [ content ]
   }
 }
