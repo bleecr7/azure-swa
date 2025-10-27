@@ -34,6 +34,9 @@ env:
 jobs:
   set-env:
     runs-on: ubuntu-latest
+    outputs:
+      WORKING_DIRECTORY: ${{ steps.set-env.outputs.WORKING_DIRECTORY }}
+      LATEST_TG_ID: ${{ steps.set-env.outputs.LATEST_TG_ID }}
     steps:
       - name: Set environment variables
         id: set-env
@@ -45,6 +48,7 @@ jobs:
             echo "WORKING_DIRECTORY=./live/dev" >> $GITHUB_ENV
             echo "LATEST_TG_ID=${{ vars.LATEST_TG_ID_DEV }}" >> $GITHUB_OUTPUT
           fi
+          echo "Build folder: $WORKING_DIRECTORY; Plan ID: $LATEST_TG_ID"
   apply:
     runs-on: ubuntu-latest
     needs: [ set-env ]
