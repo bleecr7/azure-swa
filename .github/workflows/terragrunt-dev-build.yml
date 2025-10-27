@@ -1,11 +1,15 @@
-name: Terragrunt Dev Builds
+name: Terragrunt Build Workflow
 
-on:
-  workflow_run:
-    workflows: ['Terragrunt Dev Plan']
-    branches:
-      - 'dev**'
-    types: [completed]
+on: 
+  workflow_dispatch:
+    inputs:
+      working-directory:
+        description: 'Choose build environment:'
+        required: true
+        type: choice
+        options:
+          - 'Dev'
+          - 'Prod'
      
 # Special permissions required for OIDC authentication
 permissions:
@@ -15,7 +19,6 @@ permissions:
 
 # Set environment variables for the workflow
 env:
-  WORKING_DIRECTORY: './live/dev' 
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
@@ -29,9 +32,22 @@ env:
   TF_VAR_TFSTATE_CONTAINER_NAME: ${{ vars.TF_VAR_TFSTATE_CONTAINER_NAME }}
 
 jobs:
+  set-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables
+        id: set-env
+        run: |
+          if [ "${{ inputs.working-directory }}" == "Prod" ]; then
+            echo "WORKING_DIRECTORY=./live/prod" >> $GITHUB_ENV
+            echo "LATEST_TG_ID=${{ vars.LATEST_TG_ID_PROD }}" >> $GITHUB_ENV
+          else
+            echo "WORKING_DIRECTORY=./live/dev" >> $GITHUB_ENV
+            echo "LATEST_TG_ID=${{ vars.LATEST_TG_ID_DEV }}" >> $GITHUB_ENV
+          fi
   apply:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [ set-env ]
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v5
@@ -41,7 +57,7 @@ jobs:
         with:
           name: terragrunt-plan-artifact
           repository: bleecr7/azure-swa
-          run-id: ${{ vars.LATEST_TG_ID }}
+          run-id: ${{ env.LATEST_TG_ID }}
           path: /tmp/terragrunt/
       
       - name: List plan files
