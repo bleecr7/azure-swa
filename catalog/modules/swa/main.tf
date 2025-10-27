@@ -41,7 +41,7 @@ resource "azurerm_key_vault_secret" "swa_api_key" {
 
 resource "cloudflare_dns_record" "cname_swa" {
   content = azurerm_static_web_app.swa.default_host_name
-  name    = "${var.env_name}"
+  name    = "${var.env_name}.brandonlee.cloud"
   proxied = true
   tags    = []
   ttl     = 1
@@ -55,7 +55,7 @@ resource "cloudflare_dns_record" "cname_swa" {
 resource "cloudflare_dns_record" "txt_validation_swa" {
   depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain ]
   content = azurerm_static_web_app_custom_domain.swa_custom_domain.validation_token
-  name    = "${var.env_name}"
+  name    = "${var.env_name}.brandonlee.cloud"
   proxied = false
   tags    = []
   ttl     = 1

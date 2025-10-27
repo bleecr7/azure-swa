@@ -55,8 +55,8 @@ jobs:
           tg_dir: ${{ env.WORKING_DIRECTORY }}
           tg_command: 'run --all --log-level debug --out-dir /tmp/terragrunt/tfplan/ --json-out-dir /tmp/terragrunt/json/ plan'
       
-      - name: 'Show plan output'
-        run: cat /tmp/terragrunt/json/*/*.json | jq .
+      - name: 'Show plan output changes'
+        run: cat /tmp/terragrunt/json/*/*.json | jq -r '.resource_changes[] | select(.change.actions[0]=="update" or .change.actions[0]=="create" or .change.actions[0]=="delete")'
 
       - name: 'Upload Plan Artifact'
         uses: actions/upload-artifact@v4
@@ -69,6 +69,8 @@ jobs:
     needs: [ plan ]
     steps:
       - name: 'Update GH env with latest run id'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_R }}
         run: |
             gh variable set LATEST_TG_ID --body "${{ github.run_id }}"
             gh variable list | grep LATEST_TG_ID
