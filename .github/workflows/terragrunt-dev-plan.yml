@@ -80,6 +80,4 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/${{ github.repository }}/actions/variables/LATEST_TG_ID \
             -d '{"name":"LATEST_TG_ID","value":"${{ github.run_id }}"}'
-            gh variable list | grep LATEST_TG_ID
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            echo "LATEST_TG_ID=${{ github.run_id }}" >> $GITHUB_OUTPUT
