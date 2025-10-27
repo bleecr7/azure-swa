@@ -1,5 +1,4 @@
 name: Terragrunt Dev Plan
-run-name: ${{ github.actor }} Terragrunt plan workflow - ${{ github.ref }}
 
 on: 
   push:

@@ -1,5 +1,4 @@
-name: Terragrunt Dev Build
-run-name: ${{ github.actor }} Terragrunt build workflow - ${{ github.ref }}
+name: Terragrunt Dev Builds
 
 on:
   workflow_run:
