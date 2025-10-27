@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - 'main'
+    paths:
+      - 'catalog/modules/**'
+      - 'live/prod/**'
 
 # Special permissions required for OIDC authentication
 permissions:
