@@ -28,6 +28,7 @@ resource "azurerm_static_web_app_custom_domain" "swa_custom_domain" {
 }
 
 resource "azurerm_static_web_app_custom_domain" "swa_custom_domain_root" {
+  count = var.cloudflare_apex_domain ? 1 : 0
   static_web_app_id = azurerm_static_web_app.swa.id
   domain_name       = "${var.cloudflare_zone_name}"
   validation_type   = "dns-txt-token"
@@ -70,8 +71,9 @@ resource "cloudflare_dns_record" "txt_validation_swa" {
 }
 
 resource "cloudflare_dns_record" "txt_validation_swa_root" {
-  depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain_root ]
-  content = azurerm_static_web_app_custom_domain.swa_custom_domain_root.validation_token
+  count = var.cloudflare_apex_domain ? 1 : 0
+  depends_on = [ azurerm_static_web_app_custom_domain.swa_custom_domain_root[0] ]
+  content = azurerm_static_web_app_custom_domain.swa_custom_domain_root[0].validation_token
   name    = "@"
   proxied = false
   tags    = []
@@ -81,7 +83,7 @@ resource "cloudflare_dns_record" "txt_validation_swa_root" {
   settings = {}
 
   lifecycle {
-    replace_triggered_by = [ azurerm_static_web_app_custom_domain.swa_custom_domain_root ]
+    replace_triggered_by = [ azurerm_static_web_app_custom_domain.swa_custom_domain_root[0] ]
     ignore_changes = [ content ]
   }
 }
