@@ -69,8 +69,8 @@ jobs:
     needs: [ plan ]
     steps:
       - name: 'Update GH env with latest run id'
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT_R }}
         run: |
             gh variable set LATEST_TG_ID --body "${{ github.run_id }}"
             gh variable list | grep LATEST_TG_ID
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
