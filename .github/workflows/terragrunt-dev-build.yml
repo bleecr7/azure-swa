@@ -8,8 +8,8 @@ on:
         required: true
         type: choice
         options:
-          - 'Dev'
-          - 'Prod'
+          - 'dev'
+          - 'prod'
      
 # Special permissions required for OIDC authentication
 permissions:
@@ -40,14 +40,14 @@ jobs:
     steps:
       - id: set-working-dir
         run: |
-          if [ "${{ inputs.working-directory }}" == "Prod" ]; then
+          if [ "${{ inputs.working-directory }}" == "prod" ]; then
             echo "WORKING_DIRECTORY=./live/prod" >> "$GITHUB_OUTPUT"
           else
             echo "WORKING_DIRECTORY=./live/dev" >> "$GITHUB_OUTPUT"
           fi
       - id: set-TG-id
         run: |
-          if [ "${{ inputs.working-directory }}" == "Prod" ]; then
+          if [ "${{ inputs.working-directory }}" == "prod" ]; then
             echo "LATEST_TG_ID=${{ vars.LATEST_TG_ID_PROD }}" >> "$GITHUB_OUTPUT"
           else
             echo "LATEST_TG_ID=${{ vars.LATEST_TG_ID_DEV }}" >> "$GITHUB_OUTPUT"
@@ -92,7 +92,7 @@ jobs:
       - name: Download Plan Artifact
         uses: actions/download-artifact@v5
         with:
-          name: react-build-dev
+          name: react-build
           github-token: ${{ secrets.GITHUB_TOKEN }} # token with actions:read permissions on target repo
           repository: bleecr7/react-playground
           run-id: 18732776190
@@ -111,7 +111,7 @@ jobs:
         uses: azure/CLI@v2
         with:
           inlineScript: |
-            AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --name dev-swa-api-key --vault-name ${{ secrets.KEY_VAULT_NAME }} --query value -o tsv)
+            AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --name ${{ inputs.working-directory }}-swa-api-key --vault-name ${{ secrets.KEY_VAULT_NAME }} --query value -o tsv)
             echo "::add-mask::$AZURE_STATIC_WEB_APPS_API_TOKEN"
             echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_ENV
         
