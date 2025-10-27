@@ -69,7 +69,6 @@ jobs:
     needs: [ plan ]
     steps:
       - name: 'Update GH env with latest run id'
-        uses: actions/checkout@v4
         run: |
             gh variable set LATEST_TG_ID --body "${{ github.run_id }}"
             gh variable list | grep LATEST_TG_ID
