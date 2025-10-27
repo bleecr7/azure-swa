@@ -47,6 +47,12 @@ variable "cloudflare_zone_name" {
   
 }
 
+variable "cloudflare_apex_domain" {
+  description = "Map SWA to Cloudflare apex domain"
+  type        = bool
+  default     = false
+}
+
 variable "tags" {
   description = "A map of tags to assign to the resource group"
   type        = map(string)
