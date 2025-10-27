@@ -75,6 +75,7 @@ jobs:
 
       - name: 'Update GH env with latest run id'
         run: |
+            echo "LATEST_TG_ID_DEV=${{ github.run_id }}"
             curl -L \
             -X PATCH \
             -H "Accept: application/vnd.github+json" \
