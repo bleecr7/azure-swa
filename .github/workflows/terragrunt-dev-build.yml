@@ -3,6 +3,8 @@ name: Terragrunt Dev Builds
 on:
   workflow_run:
     workflows: ['Terragrunt Dev Plan']
+    branches:
+      - 'dev**'
     types: [completed]
      
 # Special permissions required for OIDC authentication
