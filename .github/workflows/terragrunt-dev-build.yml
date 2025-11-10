@@ -104,7 +104,7 @@ jobs:
           name: react-build
           github-token: ${{ secrets.GITHUB_TOKEN }} # token with actions:read permissions on target repo
           repository: bleecr7/react-playground
-          run-id: ${{ env.LATEST_WEBAPP_BUILD_ID }}
+          run-id: ${{ needds.set-env-outputs.LATEST_WEBAPP_BUILD_ID }}
           path: ./dist/
 
       - name: 'Check files'
