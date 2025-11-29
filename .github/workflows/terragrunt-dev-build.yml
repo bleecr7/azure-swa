@@ -10,6 +10,13 @@ on:
         options:
           - 'dev'
           - 'prod'
+      app-version:
+        description: 'App version:'
+        required: true
+        type: choice
+        options:
+          - 'dev'
+          - 'prod'
      
 # Special permissions required for OIDC authentication
 permissions:
@@ -100,10 +107,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ apply ]
     steps:
-      - name: Download Plan Artifact
+      - id: set-app-version
+        run: |
+          if [ "${{ inputs.app-version }}" == "prod" ]; then
+            echo "APP_VERSION=react-build" >> "$GITHUB_OUTPUT"
+          else
+            echo "APP_VERSION=react-build-dev" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Download Web App Artifact
         uses: actions/download-artifact@v5
         with:
-          name: react-build
+          name: ${{ steps.set-app-version.outputs.APP_VERSION }}
           github-token: ${{ secrets.GITHUB_TOKEN }} # token with actions:read permissions on target repo
           repository: bleecr7/react-playground
           run-id: ${{ needs.apply.outputs.LATEST_WEBAPP_BUILD_ID }}
