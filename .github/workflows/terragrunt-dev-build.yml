@@ -45,6 +45,7 @@ jobs:
       WORKING_DIRECTORY: ${{ steps.set-working-dir.outputs.WORKING_DIRECTORY }}
       LATEST_TG_ID: ${{ steps.set-TG-id.outputs.LATEST_TG_ID }}
       LATEST_WEBAPP_BUILD_ID: ${{ steps.set-webapp-build-id.outputs.LATEST_WEBAPP_BUILD_ID }}
+      APP_ARTIFACT_NAME: ${{ steps.set-app-version.outputs.APP_ARTIFACT_NAME }}
     steps:
       - id: set-working-dir
         run: |
@@ -66,6 +67,13 @@ jobs:
             echo "LATEST_WEBAPP_BUILD_ID=${{ vars.LATEST_WEBAPP_PROD }}" >> "$GITHUB_OUTPUT"
           else
             echo "LATEST_WEBAPP_BUILD_ID=${{ vars.LATEST_WEBAPP_DEV }}" >> "$GITHUB_OUTPUT"
+          fi
+      - id: set-app-version
+        run: |
+          if [ "${{ inputs.app-version }}" == "prod" ]; then
+            echo "APP_ARTIFACT_NAME=react-build" >> "$GITHUB_OUTPUT"
+          else
+            echo "APP_ARTIFACT_NAME=react-build-dev" >> "$GITHUB_OUTPUT"
           fi
   env-info: 
     runs-on: ubuntu-latest
@@ -105,19 +113,12 @@ jobs:
 
   build-webapp:
     runs-on: ubuntu-latest
-    needs: [ apply ]
+    needs: [ apply, set-env ]
     steps:
-      - id: set-app-version
-        run: |
-          if [ "${{ inputs.app-version }}" == "prod" ]; then
-            echo "APP_VERSION=react-build" >> "$GITHUB_OUTPUT"
-          else
-            echo "APP_VERSION=react-build-dev" >> "$GITHUB_OUTPUT"
-          fi
       - name: Download Web App Artifact
         uses: actions/download-artifact@v5
         with:
-          name: ${{ steps.set-app-version.outputs.APP_VERSION }}
+          name: ${{ needs.set-env.outputs.APP_ARTIFACT_NAME }}
           github-token: ${{ secrets.GITHUB_TOKEN }} # token with actions:read permissions on target repo
           repository: bleecr7/react-playground
           run-id: ${{ needs.apply.outputs.LATEST_WEBAPP_BUILD_ID }}
