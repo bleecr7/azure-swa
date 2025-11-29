@@ -83,6 +83,7 @@ jobs:
         run: |
           echo "Build folder: ${{ needs.set-env.outputs.WORKING_DIRECTORY }}"
           echo "Plan ID: ${{ needs.set-env.outputs.LATEST_TG_ID }}"
+          echo "App Artifact Name: ${{ needs.set-env.outputs.APP_ARTIFACT_NAME }}"
           echo "Web App Run ID: ${{ needs.set-env.outputs.LATEST_WEBAPP_BUILD_ID }}"
   apply:
     runs-on: ubuntu-latest
